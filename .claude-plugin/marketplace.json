@@ -1,0 +1,16 @@
+{
+  "name": "psk",
+  "owner": {
+    "name": "Paolo Silvestre"
+  },
+  "description": "The psk delivery workflow, as an installable Claude Code plugin.",
+  "plugins": [
+    {
+      "name": "psk",
+      "source": "./",
+      "description": "Jira-integrated delivery workflow: spec, ready, dev, land.",
+      "category": "workflow",
+      "keywords": ["workflow", "jira", "delivery"]
+    }
+  ]
+}
