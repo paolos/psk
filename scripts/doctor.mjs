@@ -18,7 +18,8 @@ import { fileURLToPath } from 'node:url';
 import { loadConfig } from './config.mjs';
 import { discoverSkills, placeSkill } from './skills.mjs';
 
-const SCOPES = ['all', 'dev', 'land'];
+// One scope per command. A check with no explicit scopes applies to every command.
+const SCOPES = ['all', 'spec', 'ready', 'dev', 'land'];
 
 function run(cmd, args, opts = {}) {
   const res = spawnSync(cmd, args, { encoding: 'utf8', timeout: 20000, ...opts });
@@ -199,14 +200,28 @@ export function collectChecks({ runChecks = false } = {}) {
     const missing = ['cloudId', 'project'].filter((k) => !jira[k]);
     if (missing.length) add('jira', 'jira.config', 'fail', `jira is missing ${missing.join(', ')}`);
     else add('jira', 'jira.config', 'pass', `${jira.project}${jira.board ? ` · board ${jira.board}` : ''}`);
-    if (!jira.transitions) {
-      add('jira', 'jira.transitions', 'warn', 'no transition ids recorded', {
-        hint: 'transition names differ from status names in most workflows — record the ids',
+    // The moves psk makes itself; `done` belongs to the release, not to any command.
+    const needed = ['speccing', 'building', 'shipping'];
+    const absent = needed.filter((t) => !jira.transitions?.[t]);
+    if (absent.length) {
+      add('jira', 'jira.transitions', 'warn', `no transition id recorded for ${absent.join(', ')}`, {
+        hint: 'transition names differ from status names in most workflows — record the ids with /psk:setup',
       });
+    } else {
+      add('jira', 'jira.transitions', 'pass', `transitions: ${needed.map((t) => `${t}=${jira.transitions[t]}`).join(' ')}`);
     }
   }
 
   // --- project -------------------------------------------------------------
+  const template = cfg.effective.spec?.template;
+  if (template) {
+    const exists = fs.existsSync(path.resolve(root, template));
+    add('project', 'project.spec-template', exists ? 'pass' : 'fail', `spec template: ${template}${exists ? '' : ' — not found'}`, {
+      hint: exists ? undefined : 'spec.template is resolved from the repository root',
+      scopes: ['all', 'spec', 'ready'],
+    });
+  }
+
   const release = cfg.effective.release;
   if (!release?.bump) {
     add('project', 'project.release', cfg.present.project ? 'warn' : 'info', 'no release.bump command configured', {

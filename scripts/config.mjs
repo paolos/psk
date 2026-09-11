@@ -27,7 +27,7 @@ import { fileURLToPath } from 'node:url';
 
 export const LAYERS = ['user', 'project', 'local'];
 
-export const KNOWN_KEYS = ['version', 'jira', 'release', 'checks', 'slots'];
+export const KNOWN_KEYS = ['version', 'jira', 'spec', 'ready', 'branch', 'release', 'checks', 'slots'];
 
 export const CONFIG_VERSION = 1;
 

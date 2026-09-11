@@ -57,9 +57,25 @@ their own machine.
     }
   },
 
+  "spec": {
+    "template": "docs/pm/spec-format.md"   // optional; the default shape is in workflow.md
+  },
+
+  "ready": {
+    "requireEstimate": true,              // refuse tickets with no original estimate
+    "blockingLabels": ["blocked-external"], // refuse tickets carrying any of these
+    "excludeLabels": ["aggregate"]        // tickets that are never built, whatever their state
+  },
+
+  "branch": {
+    "base": "main",
+    "pattern": "{type}/{key}-{slug}"      // type: feat | fix | chore — from the issue type
+  },
+
   "release": {
-    "bump": "bun run version:bump",   // what land runs to cut the version
-    "changelog": "CHANGELOG.md"
+    "bump": "bun run version:bump",        // what land runs to cut the version
+    "changelog": "CHANGELOG.md",
+    "subject": "v{version} {title} (#{pr})" // the squash-merge subject
   },
 
   "checks": ["bun run check:env", "bun run test"],   // run by doctor --run-checks

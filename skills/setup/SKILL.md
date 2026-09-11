@@ -51,10 +51,20 @@ with the user. If one issue's transitions miss a state, read an issue in another
 status. The current user's `accountId` goes to the **user** layer: it is who
 "assigned to me" means, on every repository.
 
-**B. Project commands.** `release.bump` and `release.changelog` — what land runs to cut
-a version — and `checks`, what doctor runs with `--run-checks`. Propose them from
-`package.json`; ask the user to confirm the bump command in particular, since it
-rewrites the version.
+**B. Project conventions.** Propose each from what the repository already shows, and
+ask the user to confirm:
+
+- `release.bump`, `release.changelog`, `release.subject` — what land runs to cut a
+  version, and the squash-merge subject. Read the recent history of the base branch:
+  its merge subjects show the convention already in use. Confirm the bump command in
+  particular, since it rewrites the version.
+- `checks` — what doctor runs with `--run-checks`, from `package.json` or equivalent.
+- `branch.base` and `branch.pattern` — the default branch, and the naming the existing
+  branches already follow.
+- `spec.template` — a spec template the project keeps, if any.
+- `ready.requireEstimate`, `ready.blockingLabels`, `ready.excludeLabels` — read the
+  project's labels in Jira; labels marking blockers belong in `blockingLabels`, labels
+  marking tickets that are never built (containers, epics) in `excludeLabels`.
 
 **C. Slots.** For each slot in the catalogue, offer the session-loaded skills whose
 description fits the slot's summary, the most direct fit first; the user picks none,

@@ -117,6 +117,18 @@ test('unknown slots and keys warn instead of failing', () => {
   assert.deepEqual(r.errors, []);
 });
 
+test('spec, ready and branch are known keys', () => {
+  const r = resolveConfig({
+    project: {
+      spec: { template: 'docs/spec.md' },
+      ready: { excludeLabels: ['aggregate'] },
+      branch: { base: 'main' },
+    },
+  });
+  assert.deepEqual(r.warnings, []);
+  assert.deepEqual(r.effective.ready.excludeLabels, ['aggregate']);
+});
+
 test('a version this psk does not read is an error', () => {
   const r = resolveConfig({ project: { version: 2 } });
   assert.match(r.errors.join('\n'), /reads version 1/);

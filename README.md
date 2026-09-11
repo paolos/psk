@@ -9,10 +9,15 @@ the app on a device — each is a slot, filled from the skills installed on the 
 
 | Command | Does |
 |---|---|
-| `/psk:setup` | Configure psk for a repository: Jira, project commands, one skill per slot |
+| `/psk:setup` | Configure psk for a repository: Jira, project conventions, the skills in each slot |
 | `/psk:doctor` | Check the repository, psk, the skills and Jira; name the fix for each problem |
+| `/psk:spec` | Write the spec into the ticket; Backlog → Speccing |
+| `/psk:ready` | The gate: pass a ticket whole, or refuse it with the list; Speccing → Building |
+| `/psk:dev` | Build one ticket of yours on its own branch, ending in an open PR |
+| `/psk:land` | Rebase, clean up, review the final diff, cut the version, squash-merge; → Shipping |
 
-`spec`, `ready`, `dev` and `land` follow.
+One ticket, one branch, one PR — always. The lifecycle and its rules are in
+[`docs/workflow.md`](docs/workflow.md).
 
 ## Install
 
