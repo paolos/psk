@@ -114,6 +114,48 @@ export function versionVerdict(running, installs) {
 }
 
 /**
+ * What an unprotected default branch means, per command. In doctor it is a failure:
+ * the advice is to protect it. For land it is only a warning — land reaches the branch
+ * through a pull request either way, so it does not depend on protection, and blocking
+ * every land on a repository setting would make psk unusable wherever an admin has
+ * not set one.
+ *
+ * @param {{ok: boolean, out: string, err: string}} prot  result of the protection API call
+ * @param {string} branch
+ * @returns {Array<{status: string, message: string, hint?: string, scopes: string[]}>}
+ */
+export function protectionVerdict(prot, branch) {
+  if (prot.ok) {
+    return [{ status: 'pass', message: `${branch} is protected`, scopes: ['all', 'land'] }];
+  }
+  if (/404|Not Found|not protected/i.test(`${prot.out}${prot.err}`)) {
+    const message = `${branch} is not protected — anyone can commit to it directly`;
+    return [
+      {
+        status: 'fail',
+        message,
+        hint: 'Settings → Branches → add a rule for the default branch requiring a PR',
+        scopes: ['all'],
+      },
+      {
+        status: 'warn',
+        message,
+        hint: 'land still merges through a PR; protection would make that the only path',
+        scopes: ['land'],
+      },
+    ];
+  }
+  return [
+    {
+      status: 'warn',
+      message: `cannot read protection for ${branch} (${prot.err.split('\n')[0]})`,
+      hint: 'reading branch protection needs admin rights on the repository',
+      scopes: ['all', 'land'],
+    },
+  ];
+}
+
+/**
  * The verdict on one configured skill. Portability depends on WHICH LAYER configures
  * the skill, not only where the skill comes from: a plugin skill a person adds in their
  * own user or local layer never reaches a teammate, so warning them about it is noise.
@@ -182,18 +224,8 @@ export function collectChecks({ runChecks = false } = {}) {
       add('repository', 'repo.default-branch', 'pass', `${repo} → ${branch}`);
 
       const prot = run('gh', ['api', `repos/${repo}/branches/${branch}/protection`], { cwd: root });
-      if (prot.ok) {
-        add('repository', 'repo.protection', 'pass', `${branch} is protected`, { scopes: ['all', 'land'] });
-      } else if (/404|Not Found|not protected/i.test(`${prot.out}${prot.err}`)) {
-        add('repository', 'repo.protection', 'fail', `${branch} is not protected — anyone can commit to it directly`, {
-          hint: 'Settings → Branches → add a rule for the default branch requiring a PR',
-          scopes: ['all', 'land'],
-        });
-      } else {
-        add('repository', 'repo.protection', 'warn', `cannot read protection for ${branch} (${prot.err.split('\n')[0]})`, {
-          hint: 'reading branch protection needs admin rights on the repository',
-          scopes: ['all', 'land'],
-        });
+      for (const p of protectionVerdict(prot, branch)) {
+        add('repository', 'repo.protection', p.status, p.message, { hint: p.hint, scopes: p.scopes });
       }
 
       const settings = run('gh', ['api', `repos/${repo}`, '--jq', '.allow_squash_merge'], { cwd: root });

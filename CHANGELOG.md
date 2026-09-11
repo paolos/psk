@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.2.3] - 2026-09-11
+
+### Fixed
+
+- **An unprotected default branch no longer stops a land.** It stays a failure in
+  `/psk:doctor`, where the advice is to protect it, and becomes a warning in the land
+  preflight: land reaches the branch through a pull request either way, so it does not
+  depend on protection. Blocking every land on a repository setting only an admin can
+  change made psk unusable on most repositories. The verdict is a pure function,
+  `protectionVerdict`, with its own tests.
+
 ## [0.2.2] - 2026-09-11
 
 ### Added

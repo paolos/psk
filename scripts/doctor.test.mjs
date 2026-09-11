@@ -1,7 +1,27 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
-import { skillVerdict, versionVerdict } from './doctor.mjs';
+import { skillVerdict, versionVerdict, protectionVerdict } from './doctor.mjs';
+
+const forScope = (verdicts, scope) => verdicts.filter((v) => v.scopes.includes(scope));
+
+test('protection: an unprotected branch fails doctor but only warns land', () => {
+  const v = protectionVerdict({ ok: false, out: '', err: 'HTTP 404: Branch not protected' }, 'main');
+  assert.deepEqual(forScope(v, 'all').map((x) => x.status), ['fail']);
+  assert.deepEqual(forScope(v, 'land').map((x) => x.status), ['warn']);
+});
+
+test('protection: a protected branch passes everywhere', () => {
+  const v = protectionVerdict({ ok: true, out: '{}', err: '' }, 'main');
+  assert.deepEqual(forScope(v, 'land').map((x) => x.status), ['pass']);
+  assert.deepEqual(forScope(v, 'all').map((x) => x.status), ['pass']);
+});
+
+test('protection: an unreadable setting warns, it does not block', () => {
+  const v = protectionVerdict({ ok: false, out: '', err: 'HTTP 403: Must have admin rights' }, 'main');
+  assert.ok(v.every((x) => x.status === 'warn'));
+  assert.equal(forScope(v, 'land').length, 1);
+});
 
 const CACHE = 'C:/Users/u/.claude/plugins/cache/psk/psk';
 const install = { key: 'psk@psk', scope: 'user', installPath: `${CACHE}/0.2.1`, version: '0.2.1', gitCommitSha: 'd9b8997e5627' };
