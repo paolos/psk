@@ -53,8 +53,12 @@ Done when each of the four has a verdict, or the section is absent.
 
 ## 4. Report
 
-One list grouped as the script groups it — repository, psk, skills, jira, project —
-failures first within each group, each with its fix on the line below. Close with the
+Open with the psk version line. When it says the session runs an older copy than the
+one installed, lead with that: every other line of the report came from the older
+copy's scripts, so it may describe a bug the installed version already fixed.
+
+Then one list grouped as the script groups it — repository, psk, skills, jira,
+project — failures first within each group, each with its fix on the line below. Close with the
 counts, then the single next action: `/psk:setup` when psk is not initialised, else the
 first failure.
 

@@ -1,7 +1,40 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
-import { skillVerdict } from './doctor.mjs';
+import { skillVerdict, versionVerdict } from './doctor.mjs';
+
+const CACHE = 'C:/Users/u/.claude/plugins/cache/psk/psk';
+const install = { key: 'psk@psk', scope: 'user', installPath: `${CACHE}/0.2.1`, version: '0.2.1', gitCommitSha: 'd9b8997e5627' };
+
+test('version: the running copy is the installed one', () => {
+  const v = versionVerdict({ name: 'psk', version: '0.2.1', root: `${CACHE}/0.2.1` }, [install]);
+  assert.equal(v.status, 'pass');
+  assert.equal(v.message, 'psk 0.2.1 (user scope · d9b8997)');
+});
+
+test('version: the session still runs an older cached copy', () => {
+  const v = versionVerdict({ name: 'psk', version: '0.2.0', root: `${CACHE}/0.2.0` }, [install]);
+  assert.equal(v.status, 'warn');
+  assert.match(v.message, /runs psk 0\.2\.0, but 0\.2\.1/);
+  assert.match(v.hint, /reload-plugins/);
+});
+
+test('version: running from a checkout is information, not a problem', () => {
+  const v = versionVerdict({ name: 'psk', version: '0.2.2', root: 'C:/projects/mine/psk' }, [install]);
+  assert.equal(v.status, 'info');
+  assert.match(v.message, /from a checkout/);
+});
+
+test('version: not installed as a plugin', () => {
+  const v = versionVerdict({ name: 'psk', version: '0.2.2', root: 'C:/projects/mine/psk' }, []);
+  assert.equal(v.status, 'info');
+  assert.match(v.message, /not installed as a plugin/);
+});
+
+test('version: path comparison ignores case and separators', () => {
+  const v = versionVerdict({ name: 'psk', version: '0.2.1', root: 'c:\\users\\u\\.claude\\plugins\\cache\\psk\\psk\\0.2.1' }, [install]);
+  assert.equal(v.status, 'pass');
+});
 
 const plugin = { origin: 'plugin', detail: 'every machine must install the "x" plugin' };
 const userSkill = { origin: 'user', detail: 'this machine only' };

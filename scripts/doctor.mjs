@@ -13,6 +13,7 @@
 import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 import fs from 'node:fs';
+import os from 'node:os';
 import { fileURLToPath } from 'node:url';
 
 import { loadConfig } from './config.mjs';
@@ -57,6 +58,59 @@ function permissionSkills(root) {
     }
   }
   return found;
+}
+
+/** The psk copy this script belongs to: the plugin root one level above scripts/. */
+export function runningCopy(scriptFile = fileURLToPath(import.meta.url)) {
+  const root = path.resolve(path.dirname(scriptFile), '..');
+  try {
+    const m = JSON.parse(fs.readFileSync(path.join(root, '.claude-plugin', 'plugin.json'), 'utf8'));
+    return { name: m.name, version: m.version, root };
+  } catch {
+    return { name: 'psk', version: 'unknown', root };
+  }
+}
+
+/** Every install of any plugin, from Claude Code's registry. */
+export function installedCopies(home = os.homedir()) {
+  const file = path.join(home, '.claude', 'plugins', 'installed_plugins.json');
+  try {
+    const data = JSON.parse(fs.readFileSync(file, 'utf8'));
+    return Object.entries(data.plugins ?? data).flatMap(([key, value]) =>
+      (Array.isArray(value) ? value : [value]).map((v) => ({ key, ...v })),
+    );
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Which psk is running, against which is installed. The running copy is the one the
+ * session loaded — the skill runs the scripts beside it — so a mismatch means the
+ * session has not picked up an update: the skills say one thing and the installed
+ * plugin another.
+ */
+export function versionVerdict(running, installs) {
+  const same = (a, b) => path.resolve(a).toLowerCase() === path.resolve(b).toLowerCase();
+  const mine = installs.filter((i) => i.key.split('@')[0] === running.name && i.installPath);
+  const describe = (i) => `${i.version} (${i.scope} scope${i.gitCommitSha ? ` · ${i.gitCommitSha.slice(0, 7)}` : ''})`;
+
+  if (!mine.length) {
+    return { status: 'info', message: `psk ${running.version} from ${running.root} — not installed as a plugin` };
+  }
+  const here = mine.find((i) => same(i.installPath, running.root));
+  if (here) return { status: 'pass', message: `psk ${describe(here)}` };
+  if (/[\\/]plugins[\\/]cache[\\/]/i.test(running.root)) {
+    return {
+      status: 'warn',
+      message: `this session runs psk ${running.version}, but ${mine.map(describe).join(', ')} is installed`,
+      hint: '/reload-plugins, so the skills and their scripts are the installed version',
+    };
+  }
+  return {
+    status: 'info',
+    message: `psk ${running.version} from a checkout (${running.root}); installed: ${mine.map(describe).join(', ')}`,
+  };
 }
 
 /**
@@ -163,6 +217,9 @@ export function collectChecks({ runChecks = false } = {}) {
   }
 
   // --- psk -----------------------------------------------------------------
+  const v = versionVerdict(runningCopy(), installedCopies());
+  add('psk', 'psk.version', v.status, v.message, { hint: v.hint });
+
   if (cfg.present.project) {
     add('psk', 'psk.initialized', 'pass', path.relative(root, cfg.paths.project));
   } else {

@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.2.2] - 2026-09-11
+
+### Added
+
+- **doctor reports the psk version, and catches a stale session.** The first line of
+  the psk group names the version running and the one installed, with its scope and
+  commit. When the session still runs an older cached copy after an update — the
+  skills of one version driving the scripts of the same old version — it warns and
+  points to `/reload-plugins`. A copy run from a checkout is reported as such, not as
+  a problem. The verdict is a pure function, `versionVerdict`, with tests for each
+  case, including path comparison across Windows case and separators.
+
 ## [0.2.1] - 2026-09-11
 
 ### Fixed
