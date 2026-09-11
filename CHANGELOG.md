@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.2.4] - 2026-09-11
+
+### Changed
+
+- **Re-running `/psk:setup` asks what to change.** With a project layer already in
+  place, setup shows the current configuration — each value with the layer it comes
+  from — and what doctor flags, then asks which sections to change (Jira, project
+  conventions, slots, or nothing) instead of walking every section again. A section
+  name passed as argument (`/psk:setup slots`) goes straight to it. "Nothing" with a
+  clean doctor writes nothing; the drafts show only the files the chosen sections
+  touch.
+
 ## [0.2.3] - 2026-09-11
 
 ### Fixed

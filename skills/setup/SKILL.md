@@ -1,6 +1,6 @@
 ---
 name: setup
-description: Configure psk for this repository — Jira, project commands, and which installed skill fills each workflow slot. Run once per project; re-run to change a choice.
+description: Configure psk for this repository — Jira, project commands, and which installed skill fills each workflow slot. Run once per project; re-run to change a choice, optionally naming the section (jira, conventions, slots).
 disable-model-invocation: true
 ---
 
@@ -10,7 +10,7 @@ Writes the three configuration layers psk reads. The layers, the floor, and the 
 behind them are in `docs/config.md`, two levels above this skill's base directory —
 read it before step 2. The scripts are in `scripts/` beside it.
 
-Prompt-driven, not a script: explore, present what you found, ask one section at a
+Prompt-driven, not a script: explore, choose what to change, ask one section at a
 time, show the drafts, then write.
 
 ## 1. Explore
@@ -36,12 +36,32 @@ Then read what the scripts do not cover:
 Done when you know, for every slot in the catalogue, which session-loaded skills could
 fill it, and whether this is a first run or a re-run.
 
-## 2. Ask, one section at a time
+## 2. Choose what to change
 
-Summarise what exists and what is missing. Then take the sections in order, each as a
-question with the **recommended answer first**, so the user can accept it in a word.
-On a re-run, show each current value with its origin and ask only what they want to
-change.
+On a **first run** — no project layer yet — every section below is to be asked. Go to
+step 3.
+
+On a **re-run**, the configuration already works; the job is the change the user came
+for. Show the current configuration as one compact summary, section by section — each
+value with the layer it comes from (user, project, local) — followed by what doctor
+flags. Then ask which sections to change, several allowed: **A. Jira**, **B. Project
+conventions**, **C. Slots**, or **nothing**. When doctor flags a problem, recommend the
+section that fixes it.
+
+A section name passed as argument (`jira`, `conventions`, `slots`) is the answer: skip
+the question and go straight to it.
+
+**Nothing** with a clean doctor ends the run here: nothing is written. Nothing with a
+failing doctor → report the failures and their fixes, and end.
+
+Done when you hold the list of sections to ask.
+
+## 3. Ask, one section at a time
+
+Take the chosen sections in order, each as a question with the **recommended answer
+first**, so the user can accept it in a word. On a re-run, show the section's current
+values with their origin and ask only what the user wants to change within it; what
+they keep stays as it is, in the layer it is in.
 
 **A. Jira.** Site (`cloudId`), project key, board. Then the transition ids: read the
 transitions of an issue in the project and map them onto `backlog`, `speccing`,
@@ -81,13 +101,14 @@ one, or several.
 - A **per-machine** slot (`dev.verify`) belongs in the local layer. Offer the skills
   that run on this machine.
 
-Done when every section has an answer and every slot has skills, an explicit "none",
-or — for a required slot — a recorded waiver.
+Done when every chosen section has an answer and every slot asked has skills, an
+explicit "none", or — for a required slot — a recorded waiver.
 
-## 3. Show the drafts
+## 4. Show the drafts
 
 Show every file that changes, in full, and let the user edit before anything is
-written:
+written. On a re-run, only the files the chosen sections touch, with the changed keys
+pointed out:
 
 - `.claude/psk.json` — project layer: `version`, `jira` (without `accountId`),
   `release`, `checks`, the shared slots;
@@ -101,16 +122,16 @@ written:
 
 Done when the user has approved each draft.
 
-## 4. Write
+## 5. Write
 
 Write the approved files. Update an existing `## psk` block in place; edit the
-existing one of `CLAUDE.md` / `AGENTS.md` rather than creating the other. In the user
+existing one of `CLAUDE.md` / `AGENTS.md` rather than creating the other. In every
 layer, change only the keys this run set.
 
 Leave the changes uncommitted: the project file is a team contract, and it reaches
 main through a PR like any other change.
 
-## 5. Verify
+## 6. Verify
 
 Run the doctor script again. Done when it reports no failure in the `psk` group. Report
 what was written, what doctor still flags outside that group, and that the project
