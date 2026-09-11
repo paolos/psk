@@ -5,6 +5,8 @@
   "author": {
     "name": "Paolo Silvestre"
   },
+  "homepage": "https://github.com/paolos/psk",
+  "repository": "https://github.com/paolos/psk",
   "license": "MIT",
   "keywords": ["workflow", "jira", "delivery", "code-review", "release"],
   "skills": [

@@ -24,11 +24,18 @@ One ticket, one branch, one PR — always. The lifecycle and its rules are in
 The repository is its own marketplace:
 
 ```
-/plugin marketplace add C:/projects/mine/psk
+/plugin marketplace add paolos/psk
 /plugin install psk@psk
 ```
 
 Then, in a project: `/psk:setup`, and `/psk:doctor` to confirm.
+
+To work on psk itself, add the local checkout as the marketplace instead, so edits
+take effect without publishing:
+
+```
+/plugin marketplace add C:/projects/mine/psk
+```
 
 ## Configuration
 
