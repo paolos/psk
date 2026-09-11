@@ -59,6 +59,35 @@ function permissionSkills(root) {
   return found;
 }
 
+/**
+ * The verdict on one configured skill. Portability depends on WHICH LAYER configures
+ * the skill, not only where the skill comes from: a plugin skill a person adds in their
+ * own user or local layer never reaches a teammate, so warning them about it is noise.
+ * Only a skill the project file asks for has to exist on every machine.
+ *
+ * @param {{origin: string, detail: string}} placed  from skills.mjs placeSkill()
+ * @param {string|undefined} layer  the config layer that named the skill
+ * @param {boolean} required  whether its slot is required
+ * @returns {{status: 'pass'|'warn'|'fail'|'info', note: string}}
+ */
+export function skillVerdict(placed, layer, required) {
+  if (placed.origin === 'missing') {
+    return { status: required ? 'fail' : 'warn', note: placed.detail };
+  }
+  if (placed.origin === 'unplaced') return { status: 'info', note: placed.detail };
+  if (placed.origin === 'project') return { status: 'pass', note: 'project skill — travels with the repository' };
+  if (layer !== 'project') {
+    return { status: 'pass', note: `${placed.origin} skill, set in your ${layer ?? 'own'} layer — teammates unaffected` };
+  }
+  return {
+    status: 'warn',
+    note:
+      placed.origin === 'plugin'
+        ? `the project asks for it — ${placed.detail}`
+        : 'the project asks for it, but it exists only in this machine\'s ~/.claude/skills',
+  };
+}
+
 export function collectChecks({ runChecks = false } = {}) {
   const checks = [];
   const add = (group, id, status, message, { hint, scopes = SCOPES } = {}) =>
@@ -165,20 +194,17 @@ export function collectChecks({ runChecks = false } = {}) {
     const scopes = ['all', ...(SCOPES.includes(phase) ? [phase] : [])];
     for (const skill of slot.skills) {
       const placed = placeSkill(skill.name, discovered);
+      const layer = cfg.origins[`slots.${slotId}.skills.${skill.name}`];
+      const { status, note } = skillVerdict(placed, layer, slot.required);
       const label = `${slotId} → ${skill.name}${skill.args ? ` ${skill.args}` : ''}`;
-      if (placed.origin === 'project') {
-        add('skills', `skill.${slotId}`, 'pass', `${label} (project)`, { scopes });
-      } else if (placed.origin === 'missing') {
-        add('skills', `skill.${slotId}`, slot.required ? 'fail' : 'warn', `${label}: ${placed.detail}`, {
-          hint: slot.required ? 'a required slot: land stops rather than skip it' : 'optional: skipped, and said so in the PR',
-          scopes,
-        });
-      } else if (placed.origin === 'unplaced') {
-        toConfirm.push({ slot: slotId, skill: skill.name, required: slot.required });
-        add('skills', `skill.${slotId}`, 'info', `${label}: ${placed.detail}`, { scopes });
-      } else {
-        add('skills', `skill.${slotId}`, 'warn', `${label} (${placed.origin}) — ${placed.detail}`, { scopes });
+      if (placed.origin === 'unplaced') {
+        toConfirm.push({ slot: slotId, skill: skill.name, required: slot.required, layer });
       }
+      let hint;
+      if (placed.origin === 'missing') {
+        hint = slot.required ? 'a required slot: land stops rather than skip it' : 'optional: skipped, and said so in the PR';
+      }
+      add('skills', `skill.${slotId}`, status, `${label}: ${note}`, { hint, scopes });
     }
   }
 

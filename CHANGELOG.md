@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.2.1] - 2026-09-11
+
+### Fixed
+
+- **doctor no longer warns teammates about skills they will never receive.** A plugin
+  skill set in your own user or local layer was reported as "every machine must install
+  the plugin", which is only true when the project file asks for it. Portability now
+  depends on the layer that configures the skill: project-layer plugin skills warn,
+  user- and local-layer ones pass as "teammates unaffected". Found on the first real
+  setup, where six of eight warnings were this false alarm. The verdict is a pure
+  function, `skillVerdict`, with its own tests.
+
 ## [0.2.0] - 2026-09-11
 
 ### Added
