@@ -32,14 +32,17 @@ Apply every check. Record each as met or not met, with the evidence.
 4. **No excluded label**: none of `ready.excludeLabels`. These tickets are never built,
    whatever their state.
 5. **No blocking label**: none of `ready.blockingLabels`.
-6. **The spec is present**: every section of the spec shape — the project's
+6. **Every required label**: all of `ready.requireLabels`, when the project sets any.
+   The project marks what it intends to build; an unmarked ticket is not work someone
+   refused, it is work nobody has declared.
+7. **The spec is present**: every section of the spec shape — the project's
    `spec.template`, or the default in `workflow.md` — exists in the description and
    says something.
-7. **No blocking open point**: every open point is closed, or states that it blocks
+8. **No blocking open point**: every open point is closed, or states that it blocks
    nothing in this ticket. An open point that blocks the work is a reason to wait, not
    a detail to discover while building.
 
-Done when all seven carry a verdict.
+Done when every check carries a verdict.
 
 ## 3. Decide
 

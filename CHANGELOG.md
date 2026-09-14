@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.2.5] - 2026-09-14
+
+### Added
+
+- **`ready.requireLabels`: build only what the project has marked.** The mirror of
+  `excludeLabels`, and the better half of the pair for a project that labels the tickets
+  it intends to build: `/psk:ready` gains a check of its own and `/psk:dev` refuses, at
+  preflight, a ticket missing any required label. A project states what it builds or what
+  it does not — the same statement, said once.
+
 ## [0.2.4] - 2026-09-11
 
 ### Changed

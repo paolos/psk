@@ -82,9 +82,12 @@ ask the user to confirm:
 - `branch.base` and `branch.pattern` — the default branch, and the naming the existing
   branches already follow.
 - `spec.template` — a spec template the project keeps, if any.
-- `ready.requireEstimate`, `ready.blockingLabels`, `ready.excludeLabels` — read the
-  project's labels in Jira; labels marking blockers belong in `blockingLabels`, labels
-  marking tickets that are never built (containers, epics) in `excludeLabels`.
+- `ready.requireEstimate`, `ready.blockingLabels`, `ready.excludeLabels`,
+  `ready.requireLabels` — read the project's labels in Jira; labels marking blockers
+  belong in `blockingLabels`, labels marking tickets that are never built (containers,
+  epics) in `excludeLabels`, and the label a project puts on what it intends to build in
+  `requireLabels`. A project that marks its work uses that one INSTEAD of the third:
+  naming what is built and naming what is not are the same statement, said once.
 
 **C. Slots.** For each slot in the catalogue, offer the session-loaded skills whose
 description fits the slot's summary, the most direct fit first; the user picks none,

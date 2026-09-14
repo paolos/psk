@@ -64,7 +64,8 @@ their own machine.
   "ready": {
     "requireEstimate": true,              // refuse tickets with no original estimate
     "blockingLabels": ["blocked-external"], // refuse tickets carrying any of these
-    "excludeLabels": ["aggregate"]        // tickets that are never built, whatever their state
+    "excludeLabels": ["aggregate"],       // tickets that are never built, whatever their state
+    "requireLabels": ["devtask"]          // and the opposite: built ONLY if it carries these
   },
 
   "branch": {

@@ -129,6 +129,14 @@ test('spec, ready and branch are known keys', () => {
   assert.deepEqual(r.effective.ready.excludeLabels, ['aggregate']);
 });
 
+test('requireLabels is a ready key like the others', () => {
+  const r = resolveConfig({
+    project: { ready: { requireLabels: ['devtask'], excludeLabels: [] } },
+  });
+  assert.deepEqual(r.warnings, []);
+  assert.deepEqual(r.effective.ready.requireLabels, ['devtask']);
+});
+
 test('a version this psk does not read is an error', () => {
   const r = resolveConfig({ project: { version: 2 } });
   assert.match(r.errors.join('\n'), /reads version 1/);

@@ -31,8 +31,10 @@ transition names rarely match status names.
 pull request lands through `/psk:land`. There is no other path to the base branch.
 
 A project that keeps tickets which should never be built — containers, epics, speccing
-groups — lists their labels under `ready.excludeLabels`. psk does not know what those
-labels mean; it only keeps those tickets out of Building.
+groups — lists their labels under `ready.excludeLabels`. A project where only marked
+tickets are built states the mark under `ready.requireLabels`, and a ticket without it
+is refused. psk does not know what those labels mean; it only decides which tickets
+reach Building.
 
 ## The preflight
 

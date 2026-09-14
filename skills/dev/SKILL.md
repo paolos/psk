@@ -29,7 +29,7 @@ the `dev.*` slots is loaded; a missing one in a required slot stops the command,
 missing optional one is skipped and named in the PR body.
 
 Read the ticket and confirm it is in Building, assigned to `jira.accountId`, and
-carries none of `ready.excludeLabels`. Anything else goes back to the user: moving a
+carries none of `ready.excludeLabels` and every one of `ready.requireLabels`. Anything else goes back to the user: moving a
 ticket into Building is `/psk:ready`'s job, not this one's.
 
 Done when the preflight passes and the ticket is confirmed.
