@@ -1,6 +1,6 @@
 ---
 name: spec
-description: Write or refine the spec of one or more Jira tickets, in the ticket itself, and move them to Speccing. Pass the ticket keys.
+description: Write or refine the spec of one or more Jira tickets, in the ticket itself, and move them to Speccing. Pass the ticket keys, or none to choose from yours.
 disable-model-invocation: true
 ---
 
@@ -18,9 +18,11 @@ node "<base>/../../scripts/doctor.mjs" --scope=spec --json
 node "<base>/../../scripts/config.mjs" resolve --json
 ```
 
-Stop on any failure and report it. Then take the ticket keys the user passed; with
-none, ask for them. With several, the spec is one document covering all of them: it
-goes on the first key, and names the others.
+Stop on any failure and report it. Then take the ticket keys the user passed. With
+none, list the tickets in the project assigned to `jira.accountId` whose status is
+Backlog or Speccing — where a spec starts, and where it comes back to be sharpened —
+and ask which. With several, the spec is one document covering all of them: it goes on
+the first key, and names the others.
 
 Done when the preflight passes and you hold the keys.
 

@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.2.6] - 2026-09-14
+
+### Changed
+
+- **`/psk:spec` with no key lists your tickets instead of asking for one.** It shows what
+  is assigned to you in Backlog or Speccing — where a spec starts, and where it comes back
+  to be sharpened — and you pick, one or several. `/psk:dev` already listed; asking the
+  user to recall a key from memory was work the command can do itself.
+
 ## [0.2.5] - 2026-09-14
 
 ### Added
