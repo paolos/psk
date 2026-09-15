@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.2.8] - 2026-09-15
+
+### Changed
+
+- **`/psk:dev` clears the branch it came from.** A worktree manager creates a branch before
+  psk runs; psk now branches as usual and then deletes that one, so a ticket does not leave a
+  dead branch behind. It is deleted only when it carries no commits of its own — a branch with
+  work on it is kept and named in the report. Supersedes 0.2.7's rule of keeping it, which
+  traded one kind of clutter for another: the psk branch naming stops applying.
+
 ## [0.2.7] - 2026-09-15
 
 ### Fixed

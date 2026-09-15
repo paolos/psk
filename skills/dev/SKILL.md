@@ -36,17 +36,25 @@ Done when the preflight passes and the ticket is confirmed.
 
 ## 3. Branch
 
-Fetch. Then, in order:
+Fetch. Note the branch the checkout is on before you touch anything. Then:
 
 - **A branch for this key already exists** → the work is being resumed: switch to it.
-- **The checkout is already on a branch other than `branch.base`** → keep it. Another
-  tool made it — a worktree manager creates the branch before psk ever runs — and a
-  second branch for one ticket is a branch nobody merges. Say which branch you kept.
 - **Otherwise** → branch from `origin/<branch.base>` using `branch.pattern`: `{type}` is
   `fix` for a bug and `feat` otherwise, `{key}` the ticket key in lower case, `{slug}` a
   few words of the summary in lower-case ASCII joined by hyphens.
 
-Done when you are on the ticket's branch.
+**Then clear the branch you came from.** A worktree manager creates a branch of its own
+before psk ever runs, and it is left behind the moment psk branches: one dead branch per
+ticket, outliving the work. Delete it once you have switched away — a checked-out branch
+cannot be deleted, which is why this comes second — under both conditions:
+
+- it is not `branch.base`, and
+- **it carries no commits of its own**: it is an ancestor of `origin/<branch.base>`.
+
+A branch with commits on it is somebody's work, not scaffolding: keep it, and say so.
+Report either way — which branch you are on, and which you deleted.
+
+Done when you are on the ticket's branch and nothing dead is left beside it.
 
 ## 4. Build
 
