@@ -69,9 +69,19 @@ Show the user what is about to land: the version, the review outcome, the checks
 skipped optional skill. Merge on their confirmation — it is the one step in psk that
 cannot be taken back.
 
-Squash-merge with the subject from `release.subject`, deleting the branch. Move the
-ticket to Shipping with `jira.transitions.shipping`, and comment on it the version,
-the merge commit, a line on the review, and any skipped skill. Update the local base
-branch.
+Squash-merge with the subject from `release.subject`. **Delete the branch as a step of
+its own, on the remote** (`git push origin --delete <branch>`), rather than with the
+merge command's delete flag: that flag makes the client move the local checkout to the
+base branch, which fails when the base is checked out in another worktree — after the
+merge has already happened, leaving a land that reports failure on work that landed.
 
-Report the merge commit and the version. The ticket reaches Done at release.
+Move the ticket to Shipping with `jira.transitions.shipping`, and comment on it the
+version, the merge commit, a line on the review, and any skipped skill.
+
+Then update the base branch, worktree-aware: update it in place when this checkout is
+on it, and otherwise leave it alone and say where it is checked out, so the user pulls
+it there. A base branch checked out elsewhere cannot be fetched into, and the land must
+not end on an error for a housekeeping step.
+
+Report the merge commit, the version, and any branch or checkout left for the user to
+clean up. The ticket reaches Done at release.

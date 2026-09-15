@@ -36,10 +36,15 @@ Done when the preflight passes and the ticket is confirmed.
 
 ## 3. Branch
 
-Fetch, then branch from `origin/<branch.base>` using `branch.pattern`: `{type}` is
-`fix` for a bug and `feat` otherwise, `{key}` the ticket key in lower case, `{slug}` a
-few words of the summary in lower-case ASCII joined by hyphens. When a branch for this
-key already exists, the work is being resumed: switch to it.
+Fetch. Then, in order:
+
+- **A branch for this key already exists** → the work is being resumed: switch to it.
+- **The checkout is already on a branch other than `branch.base`** → keep it. Another
+  tool made it — a worktree manager creates the branch before psk ever runs — and a
+  second branch for one ticket is a branch nobody merges. Say which branch you kept.
+- **Otherwise** → branch from `origin/<branch.base>` using `branch.pattern`: `{type}` is
+  `fix` for a bug and `feat` otherwise, `{key}` the ticket key in lower case, `{slug}` a
+  few words of the summary in lower-case ASCII joined by hyphens.
 
 Done when you are on the ticket's branch.
 

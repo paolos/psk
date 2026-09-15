@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.2.7] - 2026-09-15
+
+### Fixed
+
+- **A land no longer fails on a repository that uses worktrees.** The squash-merge dropped
+  its `--delete-branch` flag, which makes the client jump to the base branch once the merge
+  is through: with the base checked out in another worktree that fails *after* the merge, so
+  a land that succeeded reported an error. The branch is now deleted on the remote as its own
+  step, and the base branch is updated only where it is checked out — elsewhere land says
+  where to pull it instead.
+
+### Changed
+
+- **`/psk:dev` keeps the branch the checkout is already on.** A worktree manager creates the
+  branch before psk runs; creating a second one for the same ticket left an unused branch per
+  ticket. psk now branches from the base only when the checkout is actually on the base.
+
 ## [0.2.6] - 2026-09-14
 
 ### Changed
