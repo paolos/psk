@@ -23,8 +23,8 @@ Then, without changing anything:
 - the current branch, and whether it carries a ticket key;
 - an open pull request for it, if any;
 - that ticket in Jira: status, assignee, labels;
-- with no ticket in sight, the tickets in `jira.project` assigned to `jira.accountId`
-  that are in Speccing or Building.
+- with no ticket in sight, the tickets assigned to you that are in Speccing or Building
+  (`docs/trackers.md` says how each tracker is asked).
 
 A command name passed as argument skips all of this: go to step 3.
 

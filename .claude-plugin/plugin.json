@@ -1,7 +1,7 @@
 {
   "name": "psk",
-  "version": "0.5.0",
-  "description": "A Jira-integrated delivery workflow: new, spec, ready, dev, land. Fixed phases, with the tools inside each phase chosen from the skills installed on the machine.",
+  "version": "0.6.0",
+  "description": "A Jira- or GitHub-tracked delivery workflow: new, spec, ready, dev, land. Fixed phases, with the tools inside each phase chosen from the skills installed on the machine.",
   "author": {
     "name": "Paolo Silvestre"
   },
@@ -11,6 +11,7 @@
   "keywords": [
     "workflow",
     "jira",
+    "github",
     "delivery",
     "code-review",
     "release"

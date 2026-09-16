@@ -344,23 +344,52 @@ export function collectChecks({ runChecks = false } = {}) {
     }
   }
 
-  // --- jira (config only; the live checks belong to the agent) -------------
+  // --- tracker (config only; the live checks belong to the agent) ----------
   const jira = cfg.effective.jira;
-  if (!jira) {
-    add('jira', 'jira.config', cfg.present.project ? 'warn' : 'info', 'no jira section configured', { hint: 'run /psk:setup' });
+  const tracker = cfg.effective.tracker ?? (jira ? { kind: 'jira' } : null);
+  if (!tracker) {
+    add('tracker', 'tracker.config', cfg.present.project ? 'warn' : 'info', 'no tracker configured', { hint: 'run /psk:setup' });
+  } else if (tracker.kind === 'github') {
+    const repo = tracker.repo ?? (run('gh', ['repo', 'view', '--json', 'nameWithOwner', '-q', '.nameWithOwner'], { cwd: root }).out || null);
+    if (!repo) {
+      add('tracker', 'tracker.config', 'fail', 'github tracker: no repo configured and none inferred from origin');
+    } else {
+      add('tracker', 'tracker.config', 'pass', `github · ${repo}`);
+      // The states psk moves a ticket through itself; `done` belongs to the release.
+      const needed = ['speccing', 'building', 'shipping'];
+      const absent = needed.filter((s) => !tracker.states?.[s]);
+      if (absent.length) {
+        add('tracker', 'tracker.states', 'fail', `no label recorded for ${absent.join(', ')}`, {
+          hint: 'a github tracker keeps the state in a label — record them with /psk:setup',
+        });
+      } else {
+        const labels = run('gh', ['label', 'list', '--repo', repo, '--limit', '200', '--json', 'name', '-q', '.[].name'], { cwd: root });
+        const have = new Set(labels.ok ? labels.out.split(/\r?\n/).map((l) => l.trim()) : []);
+        const gone = labels.ok ? needed.map((s) => tracker.states[s]).filter((l) => !have.has(l)) : [];
+        if (gone.length) {
+          add('tracker', 'tracker.states', 'fail', `labels missing on ${repo}: ${gone.join(', ')}`, {
+            hint: `create them: gh label create "${gone[0]}" --repo ${repo}`,
+          });
+        } else {
+          add('tracker', 'tracker.states', labels.ok ? 'pass' : 'warn', labels.ok
+            ? `state labels: ${needed.map((s) => tracker.states[s]).join(' ')}`
+            : 'could not list labels — gh may be unauthenticated');
+        }
+      }
+    }
   } else {
-    const missing = ['cloudId', 'project'].filter((k) => !jira[k]);
-    if (missing.length) add('jira', 'jira.config', 'fail', `jira is missing ${missing.join(', ')}`);
-    else add('jira', 'jira.config', 'pass', `${jira.project}${jira.board ? ` · board ${jira.board}` : ''}`);
+    const missing = ['cloudId', 'project'].filter((k) => !jira?.[k]);
+    if (missing.length) add('tracker', 'tracker.config', 'fail', `jira is missing ${missing.join(', ')}`);
+    else add('tracker', 'tracker.config', 'pass', `jira · ${jira.project}${jira.board ? ` · board ${jira.board}` : ''}`);
     // The moves psk makes itself; `done` belongs to the release, not to any command.
     const needed = ['speccing', 'building', 'shipping'];
-    const absent = needed.filter((t) => !jira.transitions?.[t]);
+    const absent = needed.filter((t) => !jira?.transitions?.[t]);
     if (absent.length) {
-      add('jira', 'jira.transitions', 'warn', `no transition id recorded for ${absent.join(', ')}`, {
+      add('tracker', 'tracker.states', 'warn', `no transition id recorded for ${absent.join(', ')}`, {
         hint: 'transition names differ from status names in most workflows — record the ids with /psk:setup',
       });
     } else {
-      add('jira', 'jira.transitions', 'pass', `transitions: ${needed.map((t) => `${t}=${jira.transitions[t]}`).join(' ')}`);
+      add('tracker', 'tracker.states', 'pass', `transitions: ${needed.map((t) => `${t}=${jira.transitions[t]}`).join(' ')}`);
     }
   }
 

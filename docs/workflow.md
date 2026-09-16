@@ -24,6 +24,12 @@ the release delivers it.
 Each move uses the transition id recorded under `jira.transitions`, never a name:
 transition names rarely match status names.
 
+## The tracker
+
+psk owns the lifecycle; a tracker holds the tickets. Jira and GitHub issues are both
+supported, and `docs/trackers.md` is the one place that says what each state, each move and
+each lookup means on each of them. Every other document here speaks psk's vocabulary.
+
 ## Where work comes from
 
 `/psk:new` turns a report or an idea into a ticket: it grills the request — is this one

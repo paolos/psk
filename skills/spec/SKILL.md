@@ -19,7 +19,7 @@ node "<base>/../../scripts/config.mjs" resolve --json
 ```
 
 Stop on any failure and report it. Then take the ticket keys the user passed. With
-none, list the tickets in the project assigned to `jira.accountId` whose status is
+none, list the tickets in the project assigned to you whose state is
 Backlog or Speccing — where a spec starts, and where it comes back to be sharpened —
 and ask which. With several, the spec is one document covering all of them: it goes on
 the first key, and names the others.
@@ -69,7 +69,7 @@ a stated consequence.
 Show the user the spec. Once approved, write it into the ticket's description; when a
 description already holds a spec, update it in place, closing answered open points by
 striking them through with the answer beside them. Move a ticket in Backlog to
-Speccing with `jira.transitions.speccing`.
+Speccing (`docs/trackers.md`).
 
 Report the tickets written, the open points still open with their owners, and whether
 the spec looks ready for `/psk:ready`.

@@ -63,7 +63,20 @@ first**, so the user can accept it in a word. On a re-run, show the section's cu
 values with their origin and ask only what the user wants to change within it; what
 they keep stays as it is, in the layer it is in.
 
-**A. Jira.** Site (`cloudId`), project key, board. Then the transition ids: read the
+**A. The tracker.** First **which one**: Jira, or GitHub issues on this repository. psk
+supports both and the rules are in `docs/trackers.md`. Propose the one the evidence favours
+— a `jira` section already written, or a repository whose issues are already in use —
+and record the choice as `tracker.kind`.
+
+**GitHub.** The repository (`tracker.repo`, the origin remote by default) and the label for
+each state. Read the repository's labels: a project already using `status:` labels keeps
+them, otherwise propose `status:speccing` and the rest and **offer to create them** (`gh
+label create`). Say plainly that the state is a label by convention, that psk keeps one at
+a time, and that `ready.requireEstimate` cannot be met on GitHub. The user's login goes to
+the **user** layer as `tracker.me`, like `jira.accountId`: it is who "assigned to me"
+means.
+
+**Jira.** Site (`cloudId`), project key, board. Then the transition ids: read the
 transitions of an issue in the project and map them onto `backlog`, `speccing`,
 `building`, `shipping`, `done`. Transition names usually differ from status names —
 `To Speccing` for the status Speccing is typical — so record ids and confirm the mapping

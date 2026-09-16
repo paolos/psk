@@ -28,7 +28,8 @@ Apply every check. Record each as met or not met, with the evidence.
 
 1. **Status** is Speccing.
 2. **Assignee** is set — `/psk:dev` builds only tickets assigned to the person running it.
-3. **Estimate** is set, when `ready.requireEstimate` is true.
+3. **Estimate** is set, when `ready.requireEstimate` is true. A tracker with no estimate
+   field cannot meet this: say so and move on, rather than failing a check nobody can pass.
 4. **No excluded label**: none of `ready.excludeLabels`. These tickets are never built,
    whatever their state.
 5. **No blocking label**: none of `ready.blockingLabels`.
@@ -46,7 +47,7 @@ Done when every check carries a verdict.
 
 ## 3. Decide
 
-**All met** → move the ticket to Building with `jira.transitions.building`, and report
+**All met** → move the ticket to Building (`docs/trackers.md`), and report
 it passed.
 
 **Any unmet** → move nothing. Report each unmet check with its evidence and the action

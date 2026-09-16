@@ -19,7 +19,8 @@ the app on a device — each is a slot, filled from the skills installed on the 
 | `/psk:land` | Align with the base, clean up, review the final diff, cut the version, squash-merge; → Shipping |
 
 One ticket, one branch, one PR — always. The lifecycle and its rules are in
-[`docs/workflow.md`](docs/workflow.md).
+[`docs/workflow.md`](docs/workflow.md); the tickets live on **Jira or GitHub issues**, and
+[`docs/trackers.md`](docs/trackers.md) says what each state and move means on each.
 
 ## Install
 

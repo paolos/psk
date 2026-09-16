@@ -1,5 +1,29 @@
 # Changelog
 
+## [0.6.0] - 2026-09-16
+
+### Added
+
+- **GitHub issues as a tracker, beside Jira.** `tracker.kind` picks one; `docs/trackers.md`
+  is the single place that says what each psk state, move and lookup means on each. On
+  GitHub the state is a **label** by convention " — `status:speccing` and the rest " — because an
+  issue has only open and closed: psk keeps one at a time, since GitHub will not. Projects
+  v2 was not used: it needs a project created and linked, its issues added to it, the
+  `project` scope on every machine and opaque node ids in the config, where a label needs
+  none of that. Projects classic, the board that used to come with a repository, was retired
+  " — its API answers 404.
+- **doctor checks the tracker, whichever it is**: on GitHub it reads the repository's labels
+  and names the ones missing, with the `gh label create` that makes them.
+
+### Changed
+
+- **The skills speak psk's vocabulary, not Jira's.** "Move it to Building" instead of a
+  transition id; "assigned to you" instead of an account id. The mapping lives in one file.
+- **`/psk:ready` cannot demand an estimate a tracker has no field for**: on GitHub it says so
+  and moves on, rather than failing a check nobody can pass.
+- **A land on GitHub never writes `Closes #n`** in the pull request: GitHub would close the
+  ticket at merge, and in psk a merged ticket is in Shipping " — the release is still ahead.
+
 ## [0.5.0] - 2026-09-16
 
 ### Added

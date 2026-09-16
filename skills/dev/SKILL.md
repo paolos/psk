@@ -13,7 +13,8 @@ to `/psk:land`. The lifecycle rules — the unit, going back, the changelog — 
 ## 1. Choose the ticket
 
 With a key, take it. With none, list the tickets in the project whose status is
-Building and whose assignee is `jira.accountId`, and ask which.
+Building and assigned to you, and ask which. The tracker operations — read a ticket, set its state, comment, create, list yours — are in
+`docs/trackers.md`, two levels above this skill's base directory.
 
 Done when you hold exactly one ticket key.
 
@@ -28,7 +29,7 @@ Stop on any failure. Then confirm against the session's skill list that every sk
 the `dev.*` slots is loaded; a missing one in a required slot stops the command, a
 missing optional one is skipped and named in the PR body.
 
-Read the ticket and confirm it is in Building, assigned to `jira.accountId`, and
+Read the ticket and confirm it is in Building, assigned to you, and
 carries none of `ready.excludeLabels` and every one of `ready.requireLabels`. Anything else goes back to the user: moving a
 ticket into Building is `/psk:ready`'s job, not this one's.
 
@@ -66,7 +67,7 @@ The spec in the ticket's description is the target. Build it with the skills in 
 
 When the spec turns out wrong — a case it misses, a contract the code contradicts —
 **go back**: stop building, comment on the ticket what is wrong and why, move it to
-Speccing with `jira.transitions.speccing`, and report. The fix belongs in the spec.
+Speccing, and report. The fix belongs in the spec.
 
 Done when everything the spec asks for is built, or the ticket has gone back.
 

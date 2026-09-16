@@ -67,10 +67,10 @@ A ticket born in the same shape it will be specced in does not have to be rewrit
 later.
 
 Show the user the summary and the description in full. On their confirmation, create the
-ticket in `jira.project`:
+ticket (`docs/trackers.md`):
 
-- **issue type** from `jira.issueTypes` for its kind;
-- **assignee** `jira.accountId`, unless the user names someone else;
+- **issue type** for its kind — an issue type on Jira, a label on GitHub;
+- **assignee** you, unless the user names someone else;
 - **status** left in Backlog. `/psk:spec` is what takes a ticket to Speccing, and a
   ticket that lands in Speccing without a spec makes `/psk:ready` lie.
 

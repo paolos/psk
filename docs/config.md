@@ -57,6 +57,18 @@ their own machine.
     }
   },
 
+  // Which tracker holds the tickets. Absent + a "jira" section = jira, for compatibility.
+  // The operations and the GitHub rules are in docs/trackers.md.
+  "tracker": {
+    "kind": "github",
+    "repo": "owner/name",             // optional; the origin remote when absent
+    "states": {                       // github only: the state IS a label, one at a time
+      "backlog": "status:backlog", "speccing": "status:speccing",
+      "building": "status:building", "shipping": "status:shipping"
+    },
+    "issueTypes": { "bug": "bug", "feature": "enhancement" }
+  },
+
   "spec": {
     // One file for everything:
     //   "template": "docs/pm/spec-format.md"

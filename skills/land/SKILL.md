@@ -88,7 +88,8 @@ merge command's delete flag: that flag makes the client move the local checkout 
 base branch, which fails when the base is checked out in another worktree — after the
 merge has already happened, leaving a land that reports failure on work that landed.
 
-Move the ticket to Shipping with `jira.transitions.shipping`, and comment on it the
+Move the ticket to Shipping (`docs/trackers.md` — and on GitHub never write `Closes #n` in
+the pull request, which would close the ticket a release early), and comment on it the
 version, the merge commit, a line on the review, and any skipped skill.
 
 Then update the base branch, worktree-aware: update it in place when this checkout is

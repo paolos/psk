@@ -36,9 +36,11 @@ skill list available to you now.
 
 Done when every configured skill carries a verdict of its own.
 
-## 3. Check Jira live
+## 3. Check the tracker live
 
 With the Atlassian tools, against the `jira` section of the merged config:
+
+**On Jira**, with the Atlassian tools:
 
 - the site for `jira.cloudId` is reachable;
 - project `jira.project` exists and returns issues;
@@ -46,6 +48,11 @@ With the Atlassian tools, against the `jira` section of the merged config:
   read the transitions of one of its issues and compare the ids; workflows get edited,
   and a stale id turns a status change into a silent failure;
 - `jira.accountId`, if set, resolves to the current user.
+
+**On GitHub**, with `gh`: the repository answers, and `tracker.me` is a login that can be
+assigned issues on it. The state labels are checked by the script already; what only you
+can see is whether any ticket carries **two** of them at once — `gh issue list --label`
+for each state, and any key appearing twice is a ticket whose state nobody can read.
 
 With no `jira` section, record one warn pointing to `/psk:setup` and move on.
 
