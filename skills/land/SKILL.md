@@ -29,11 +29,19 @@ Done when the preflight passes and you hold the PR, its branch and its ticket.
 
 ## 2. Rebase
 
-Fetch and rebase the branch onto `origin/<branch.base>`. Resolve conflicts with the
-skills in slot `land.conflicts`. With conflicts and no skill in that slot, stop and
-report them.
+Fetch, then bring the branch up to date with `origin/<branch.base>`:
 
-Done when the branch sits on the current base with no conflict.
+- **The repository squash-merges** (doctor's `repo.squash`) → **merge the base into the
+  branch**. The squash discards the branch's history anyway, so rebasing buys a tidy
+  history nobody will ever see, and costs a force push — the one command in a land that
+  can destroy a teammate's work.
+- **Otherwise** → rebase, and push later with `--force-with-lease --force-if-includes`:
+  the branch's own commits will reach the base branch, so their shape matters.
+
+Resolve conflicts with the skills in slot `land.conflicts`. With conflicts and no skill
+in that slot, stop and report them.
+
+Done when the branch carries everything on the base, with no conflict.
 
 ## 3. Clean up
 
@@ -56,10 +64,15 @@ Run the project's `checks`. A failure stops the land.
 
 ## 6. Cut the version
 
-Run `release.bump`. In `release.changelog`, turn `## [Unreleased]` into
-`## [X.Y.Z] - <today>`, dated the day it lands. When the section is missing, write the
-entry from the PR description and say so in the report. Commit as
-`chore(release): vX.Y.Z` and push with `--force-with-lease`.
+Run `release.bump`, **with the level the work calls for**: a bug fix takes a patch, and
+anything else takes a minor. Read it off the ticket's issue type, not off the diff. Say
+the level and the resulting version in the summary at step 7, where the user can correct
+it — it is the one number that outlives the ticket.
+
+In `release.changelog`, turn `## [Unreleased]` into `## [X.Y.Z] - <today>`, dated the day
+it lands. When the section is missing, write the entry from the PR description and say so
+in the report. Commit as `chore(release): vX.Y.Z`, then push — plainly after a merge, and
+with `--force-with-lease --force-if-includes` after a rebase.
 
 Done when the branch carries the new version and its dated changelog entry.
 

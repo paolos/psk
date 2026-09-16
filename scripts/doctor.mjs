@@ -184,6 +184,32 @@ export function skillVerdict(placed, layer, required) {
   };
 }
 
+/**
+ * Local branches whose upstream is gone: the remote branch was deleted, which is what a
+ * land does once the pull request is merged. So the work is on the base branch and the
+ * local branch is a leftover — even though `git branch -d` refuses it, because a squash
+ * merge leaves none of its commits on the base to recognise.
+ *
+ * Reads `git branch -vv` output. The branch the checkout is on is reported too, since
+ * naming it is the only way its owner learns to move off it; deleting it is their call.
+ *
+ * @param {string} out  `git branch -vv` stdout
+ * @returns {string[]}  branch names, current one first when it is among them
+ */
+export function landedBranches(out) {
+  const landed = [];
+  for (const line of (out ?? '').split(/\r?\n/)) {
+    if (!line.trim()) continue;
+    const current = line.startsWith('*');
+    // `* `, `+ ` (checked out in another worktree) or two spaces, then the name.
+    const m = /^[*+ ]\s*(\S+)\s/.exec(line);
+    if (!m) continue;
+    if (!/\[[^\]]+: gone\]/.test(line)) continue;
+    landed[current ? 'unshift' : 'push'](m[1]);
+  }
+  return landed;
+}
+
 export function collectChecks({ runChecks = false } = {}) {
   const checks = [];
   const add = (group, id, status, message, { hint, scopes = SCOPES } = {}) =>
@@ -237,6 +263,17 @@ export function collectChecks({ runChecks = false } = {}) {
           scopes: ['all', 'land'],
         });
       }
+    }
+  }
+
+  const branches = run('git', ['branch', '-vv'], { cwd: root });
+  if (branches.ok) {
+    const landed = landedBranches(branches.out);
+    if (landed.length > 0) {
+      add('repository', 'repo.landed-branches', 'warn', `landed branches still local: ${landed.join(', ')}`, {
+        hint: 'their remote is gone, so the work is on the base branch: git branch -D <branch>',
+        scopes: ['all'],
+      });
     }
   }
 

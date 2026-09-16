@@ -49,9 +49,12 @@ ticket, outliving the work. Delete it once you have switched away — a checked-
 cannot be deleted, which is why this comes second — under both conditions:
 
 - it is not `branch.base`, and
-- **it carries no commits of its own**: it is an ancestor of `origin/<branch.base>`.
+- **it carries no commits of its own** (it is an ancestor of `origin/<branch.base>`), **or
+  it has already landed** — its upstream is gone, which is how a squash-merged branch
+  looks once land has deleted it on the remote. `git branch -d` refuses that one: the
+  squash left none of its commits on the base to recognise, so it takes `-D`.
 
-A branch with commits on it is somebody's work, not scaffolding: keep it, and say so.
+A branch with unlanded commits on it is somebody's work, not scaffolding: keep it, and say so.
 Report either way — which branch you are on, and which you deleted.
 
 Done when you are on the ticket's branch and nothing dead is left beside it.

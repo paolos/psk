@@ -1,5 +1,28 @@
 # Changelog
 
+## [0.3.0] - 2026-09-16
+
+### Changed
+
+- **Land stops rewriting history when the repository squash-merges.** It merges the base
+  into the branch instead of rebasing onto it, and pushes plainly. The squash discards the
+  branch's history either way, so the rebase bought a tidy history nobody would ever read,
+  at the price of the one command in a land that can destroy a teammate's work. A repository
+  that does not squash-merge still rebases, and now pushes with `--force-if-includes`
+  alongside `--force-with-lease`.
+- **The version bump takes the level the work calls for**: patch for a bug, minor otherwise,
+  read off the ticket's issue type and shown in the summary before the merge. It was always
+  whatever `release.bump` defaulted to, which left the real convention in each session's head.
+- **Nothing after the merge can fail a land.** The steps that follow it are a report: the
+  work is already on the base branch, and an error there only confuses.
+
+### Added
+
+- **doctor reports landed branches still sitting in the local repository** — upstream gone,
+  which is what a squash-merged branch looks like once land deleted it on the remote. They
+  accumulate one per ticket because `git branch -d` refuses them, and nothing else notices.
+  `/psk:dev` now deletes the one it starts from.
+
 ## [0.2.8] - 2026-09-15
 
 ### Changed

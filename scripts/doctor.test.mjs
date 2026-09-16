@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
-import { skillVerdict, versionVerdict, protectionVerdict } from './doctor.mjs';
+import { skillVerdict, versionVerdict, protectionVerdict, landedBranches } from './doctor.mjs';
 
 const forScope = (verdicts, scope) => verdicts.filter((v) => v.scopes.includes(scope));
 
@@ -95,4 +95,30 @@ test('a missing skill fails in a required slot and warns in an optional one, wha
 
 test('an unplaced skill is left for the agent to confirm', () => {
   assert.equal(skillVerdict(unplaced, 'project', true).status, 'info');
+});
+
+const BRANCHES = [
+  '+ feat/illiria-111-tabs 4b13d07 (C:/wt/I-111) [origin/feat/illiria-111-tabs: gone] chore(release): v0.12.0',
+  '* main                  13f524e [origin/main] v0.12.0 something (#71)',
+  '  paolos/I-112          370f43c chore(psk): commit the configuration (#70)',
+  '  feat/live             abc1234 [origin/feat/live: ahead 2] work in progress',
+].join('\n');
+
+test('a branch whose remote is gone has landed: a squash merge leaves nothing else to see', () => {
+  assert.deepEqual(landedBranches(BRANCHES), ['feat/illiria-111-tabs']);
+});
+
+test('a branch with a live upstream, and one with none at all, are not leftovers', () => {
+  assert.equal(landedBranches(BRANCHES).includes('feat/live'), false);
+  assert.equal(landedBranches(BRANCHES).includes('paolos/I-112'), false);
+});
+
+test('the branch the checkout is on comes first: it is the one its owner must move off', () => {
+  const out = ['  other aaa [origin/other: gone] x', '* mine bbb [origin/mine: gone] y'].join('\n');
+  assert.deepEqual(landedBranches(out), ['mine', 'other']);
+});
+
+test('no branches, no noise', () => {
+  assert.deepEqual(landedBranches(''), []);
+  assert.deepEqual(landedBranches(undefined), []);
 });
