@@ -1,6 +1,6 @@
 {
   "name": "psk",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "A Jira-integrated delivery workflow: new, spec, ready, dev, land. Fixed phases, with the tools inside each phase chosen from the skills installed on the machine.",
   "author": {
     "name": "Paolo Silvestre"
@@ -18,6 +18,7 @@
   "skills": [
     "./skills/setup",
     "./skills/doctor",
+    "./skills/help",
     "./skills/new",
     "./skills/spec",
     "./skills/ready",

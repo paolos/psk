@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.5.0] - 2026-09-16
+
+### Added
+
+- **`/psk:help` — what to do now, not what exists.** It reads the current branch, its ticket
+  and that ticket's status, then names the single next command with the key already in it; the
+  guide underneath is derived from this project's configuration, so "what happens when I run
+  land" names the skills actually in the slots. A fixed list of commands goes stale and nobody
+  rereads it — the state of the work changes every day, and that is what this reads.
+
 ## [0.4.0] - 2026-09-16
 
 ### Added

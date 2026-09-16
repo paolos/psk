@@ -11,6 +11,7 @@ the app on a device — each is a slot, filled from the skills installed on the 
 |---|---|
 | `/psk:setup` | Configure psk for a repository: Jira, project conventions, the skills in each slot |
 | `/psk:doctor` | Check the repository, psk, the skills and Jira; name the fix for each problem |
+| `/psk:help` | Where you are in the workflow and which command comes next, from this project's state |
 | `/psk:new` | Turn a report or an idea into a ticket: grill it, write it in the project's shape, create it |
 | `/psk:spec` | Write the spec into the ticket — a diagnosis when it is a bug; Backlog → Speccing |
 | `/psk:ready` | The gate: pass a ticket whole, or refuse it with the list; Speccing → Building |
