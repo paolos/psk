@@ -1,5 +1,31 @@
 # Changelog
 
+## [0.4.0] - 2026-09-16
+
+### Added
+
+- **`/psk:new` — the way work enters psk.** It takes a report or an idea, grills the request
+  (is this one thing? how would anyone know it is done? for a bug: which steps, which version,
+  always or sometimes?), reads what the description touches without changing a line, writes it
+  in the project's shape and creates the ticket in Backlog on confirmation. Nothing in psk
+  created tickets until now, so every ticket was written by hand outside the workflow it then
+  had to pass through.
+- **Bundled spec shapes, one per kind** — `templates/feature.md` (What · Impact · Open Points ·
+  Verification) and `templates/bug.md` (Symptom · Diagnosis · Fix · Open Points · Verification).
+  The default shape used to live as prose in `docs/workflow.md`, which meant a project could
+  point `spec.template` at its own file and the two would drift apart with nothing to compare.
+- **`jira.issueTypes`** — what a project calls a bug and a piece of work, so `/psk:new` can
+  create the right kind. Asked by `/psk:setup`.
+
+### Changed
+
+- **`spec.template` takes one file per kind**, `{ "feature": …, "bug": … }`, and still accepts a
+  single path meaning "for everything".
+- **`/psk:spec` writes a diagnosis for a bug**, not a design: it runs the `dev.bugfix` skills to
+  reproduce and locate the fault, cites file and line, says whether it is a regression and since
+  when — and changes no code, because a diagnosis written while fixing records the fix instead
+  of the cause.
+
 ## [0.3.0] - 2026-09-16
 
 ### Changed

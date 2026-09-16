@@ -24,6 +24,13 @@ the release delivers it.
 Each move uses the transition id recorded under `jira.transitions`, never a name:
 transition names rarely match status names.
 
+## Where work comes from
+
+`/psk:new` turns a report or an idea into a ticket: it grills the request — is this one
+thing, how would anyone know it is done — looks at what the description touches, writes it
+in the project's shape, and creates it in Backlog on the user's confirmation. Nothing else
+in psk creates tickets, and nothing downstream works without one.
+
 ## The unit
 
 **One ticket, one branch, one PR — always.** A ticket is taken in charge by
@@ -86,15 +93,16 @@ would reach the base branch unreviewed. **The reviewed diff is the diff that mer
 
 ## The spec
 
-A spec follows the project's template when `spec.template` names one. Without it:
+A spec follows the project's template when `spec.template` names one — per kind, or one
+file for everything. Without it, psk writes the shape bundled in `templates/`:
 
-```
-## Cosa          what this is, and what it is not
-## Impatti UI    what the user sees or does, per screen, with the file it lands in
-## Impatti BE    the API contract; confirmed apart from assumed
-## Open Points   numbered; each names an owner and what it blocks
-## Verifica      how you would know it works; what only a real device can show
-```
+- `templates/feature.md` — **What · Impact · Open Points · Verification**
+- `templates/bug.md` — **Symptom · Diagnosis · Fix · Open Points · Verification**
+
+They are the floor, not a preference: a project with a shape of its own points
+`spec.template` at it and psk uses that instead, including its headings and its language.
+A bug and a feature take different shapes because they are read by different people — a
+reporter checks the symptom, a builder reads the diagnosis.
 
 An open point is closed by editing its entry — struck through, with the answer beside
 it — never by deleting it: the spec shows what was decided, not only what is left.

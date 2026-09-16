@@ -81,7 +81,14 @@ ask the user to confirm:
 - `checks` — what doctor runs with `--run-checks`, from `package.json` or equivalent.
 - `branch.base` and `branch.pattern` — the default branch, and the naming the existing
   branches already follow.
-- `spec.template` — a spec template the project keeps, if any.
+- `spec.template` — the spec shape, per kind: `{ "feature": …, "bug": … }`, or one file for
+  both. Look for a template the project already keeps (a `docs/**/spec*.md` is the usual
+  place) and offer it; with none, say that psk's bundled `templates/` will be used and
+  what shape they have. A project that writes its tickets in its own language wants its
+  own file here, because the bundled ones are in English.
+- `jira.issueTypes` — what this project calls a bug and a piece of work (`Bug` and
+  `Work Item` is the common pair). `/psk:new` creates with these; read the project's issue
+  types rather than guessing, and confirm the mapping with the user.
 - `ready.requireEstimate`, `ready.blockingLabels`, `ready.excludeLabels`,
   `ready.requireLabels` — read the project's labels in Jira; labels marking blockers
   belong in `blockingLabels`, labels marking tickets that are never built (containers,

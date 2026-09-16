@@ -11,10 +11,11 @@ the app on a device — each is a slot, filled from the skills installed on the 
 |---|---|
 | `/psk:setup` | Configure psk for a repository: Jira, project conventions, the skills in each slot |
 | `/psk:doctor` | Check the repository, psk, the skills and Jira; name the fix for each problem |
-| `/psk:spec` | Write the spec into the ticket; Backlog → Speccing |
+| `/psk:new` | Turn a report or an idea into a ticket: grill it, write it in the project's shape, create it |
+| `/psk:spec` | Write the spec into the ticket — a diagnosis when it is a bug; Backlog → Speccing |
 | `/psk:ready` | The gate: pass a ticket whole, or refuse it with the list; Speccing → Building |
 | `/psk:dev` | Build one ticket of yours on its own branch, ending in an open PR |
-| `/psk:land` | Rebase, clean up, review the final diff, cut the version, squash-merge; → Shipping |
+| `/psk:land` | Align with the base, clean up, review the final diff, cut the version, squash-merge; → Shipping |
 
 One ticket, one branch, one PR — always. The lifecycle and its rules are in
 [`docs/workflow.md`](docs/workflow.md).

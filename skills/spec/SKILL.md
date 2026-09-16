@@ -41,8 +41,18 @@ cannot answer from the code.
 
 ## 3. Write
 
-Use `spec.template` when the project names one, the default shape in `workflow.md`
-otherwise. Split what the app team can start on its own from what waits on someone
+Write in the shape for **this ticket's kind**, resolved in this order: `spec.template`
+for the kind (`spec.template.bug` / `spec.template.feature`), then `spec.template` when
+it names one file for everything, then the bundled `templates/bug.md` or
+`templates/feature.md` two levels above this skill's base directory. See `docs/config.md`.
+
+**For a bug the spec is a diagnosis.** Run the skills in slot `dev.bugfix` to reproduce
+it and find where it comes from, and write that down with file and line. Two rules bind
+this: **change no code** — the fix is `/psk:dev`'s, and a diagnosis written while fixing
+records the fix instead of the cause — and say plainly whether it is a regression, and
+since when.
+
+For anything else, split what the team can start on its own from what waits on someone
 else's answer — that split is what the spec is for.
 
 Every question you could not settle becomes an open point with an **owner** and what

@@ -58,7 +58,13 @@ their own machine.
   },
 
   "spec": {
-    "template": "docs/pm/spec-format.md"   // optional; the default shape is in workflow.md
+    // One file for everything:
+    //   "template": "docs/pm/spec-format.md"
+    // or one per kind, which is what a project with both bugs and features wants:
+    "template": {
+      "feature": "docs/pm/spec-format.md",
+      "bug": "docs/pm/bug-format.md"
+    }
   },
 
   "ready": {
@@ -67,6 +73,10 @@ their own machine.
     "excludeLabels": ["aggregate"],       // tickets that are never built, whatever their state
     "requireLabels": ["devtask"]          // and the opposite: built ONLY if it carries these
   },
+
+  // Inside "jira", for /psk:new: what this project calls its issue types.
+  //   "issueTypes": { "bug": "Bug", "feature": "Work Item" }
+
 
   "branch": {
     "base": "main",

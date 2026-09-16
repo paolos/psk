@@ -35,8 +35,8 @@ Apply every check. Record each as met or not met, with the evidence.
 6. **Every required label**: all of `ready.requireLabels`, when the project sets any.
    The project marks what it intends to build; an unmarked ticket is not work someone
    refused, it is work nobody has declared.
-7. **The spec is present**: every section of the spec shape — the project's
-   `spec.template`, or the default in `workflow.md` — exists in the description and
+7. **The spec is present**: every section of the shape for this ticket's kind — the
+   project's `spec.template`, or the bundled template — exists in the description and
    says something.
 8. **No blocking open point**: every open point is closed, or states that it blocks
    nothing in this ticket. An open point that blocks the work is a reason to wait, not
