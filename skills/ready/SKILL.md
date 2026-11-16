@@ -39,6 +39,8 @@ Apply every check. Record each as met or not met, with the evidence.
 7. **The spec is present**: every section of the shape for this ticket's kind — the
    project's `spec.template`, or the bundled template — exists in the description and
    says something.
+   A bundled template's headings may be translated into the ticket's language, and the
+   `Original message:` block on top is the reporter's, not part of the spec.
 8. **No blocking open point**: every open point is closed, or states that it blocks
    nothing in this ticket. An open point that blocks the work is a reason to wait, not
    a detail to discover while building.

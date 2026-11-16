@@ -97,8 +97,9 @@ ask the user to confirm:
 - `spec.template` — the spec shape, per kind: `{ "feature": …, "bug": … }`, or one file for
   both. Look for a template the project already keeps (a `docs/**/spec*.md` is the usual
   place) and offer it; with none, say that psk's bundled `templates/` will be used and
-  what shape they have. A project that writes its tickets in its own language wants its
-  own file here, because the bundled ones are in English.
+  what shape they have. The language is not a reason for one: a spec follows the
+  ticket's language and translates the bundled headings. A project wants its own file
+  when it wants a different shape, or headings fixed in its own words.
 - `jira.issueTypes` — what this project calls a bug and a piece of work (`Bug` and
   `Work Item` is the common pair). `/psk:new` creates with these; read the project's issue
   types rather than guessing, and confirm the mapping with the user.

@@ -110,6 +110,11 @@ They are the floor, not a preference: a project with a shape of its own points
 A bug and a feature take different shapes because they are read by different people — a
 reporter checks the symptom, a builder reads the diagnosis.
 
+The spec sits **below the reporter's original description**, kept on top under
+`## Original message:` exactly as written, images and videos included: whoever specs a
+ticket is often not whoever reported it. It is written in the **ticket's language**; with
+the bundled templates, their headings are translated too.
+
 An open point is closed by editing its entry — struck through, with the answer beside
 it — never by deleting it: the spec shows what was decided, not only what is left.
 When a comment corrects the spec, the correction goes into the description; a spec
