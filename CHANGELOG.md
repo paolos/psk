@@ -1,5 +1,18 @@
 # Changelog
 
+## [Unreleased]
+
+### Changed
+
+- **`/psk:spec` keeps the reporter's description.** The spec goes below it, and the
+  original stays on top under `## Original message:`, images and videos included: whoever
+  specs a ticket is often not whoever reported it, and replacing the description took
+  their words and their screenshots out of their own ticket. On Jira a description that
+  embeds media is written through the REST API in ADF, because the MCP turns media into
+  `blob:` links it cannot write back; without a token psk stops rather than drop them.
+- **The spec is written in the ticket's language**, the bundled templates' headings
+  included. `/psk:ready` accepts them translated.
+
 ## [0.6.0] - 2026-09-16
 
 ### Added

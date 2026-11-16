@@ -19,9 +19,23 @@ it is performed.
 | --- | --- | --- |
 | **Read a ticket** | `getJiraIssue` | `gh issue view <n> --json title,body,labels,assignees,comments,state` |
 | **Set its state** | `transitionJiraIssue` with the id under `jira.transitions` | swap the status label: remove the current one, add the new one — `gh issue edit <n> --remove-label … --add-label …` |
+| **Write the description** | `editJiraIssue` in markdown; through the REST API in ADF when the original embeds media (below) | `gh issue edit <n> --body …` |
 | **Comment** | `addOrEditJiraIssueComment` | `gh issue comment <n> --body …` |
 | **Create** | `createJiraIssue` in `jira.project` | `gh issue create --title … --body … --label …` |
 | **List mine in a state** | JQL on `assignee = jira.accountId` | `gh issue list --assignee <tracker.me> --label <state label>` |
+
+## Jira: a description that embeds media
+
+The Atlassian MCP reads and writes a description as markdown. An image or a video pasted
+into a Jira description is an ADF `media` node, and the markdown it comes back as is a
+`blob:` link that cannot be written back: a description rewritten through the MCP loses
+it. Asking the MCP for `adf` does not help, it still answers markdown.
+
+So when the original description holds media, `/psk:spec` writes through the REST API:
+`GET /rest/api/3/issue/<key>?fields=description` returns the ADF, the spec goes after the
+original's nodes, and `PUT /rest/api/3/issue/<key>` writes `{"fields":{"description":<adf>}}`.
+Basic auth with the user's email and an API token; where the token lives is the user's
+business, never a committed file. Without one, psk stops and says so.
 
 ## GitHub: the state is a label, by convention
 

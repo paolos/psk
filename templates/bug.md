@@ -8,7 +8,8 @@ comes from, and what will change. A project that wants its own shape points
 ## Symptom
 
 What a person did, what they expected, what happened instead. How often, and on which
-version. Keep the reporter's own words: they saw it, you did not.
+version. The reporter's own words are already on top, under `Original message:`: quote
+them where they matter, since they saw it and you did not.
 
 ## Diagnosis
 
